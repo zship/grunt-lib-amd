@@ -1,0 +1,23 @@
+{
+	"name": "grunt-lib-amd",
+	"main": "amd",
+	"title": "grunt-lib-amd",
+	"description": "Common functionality shared across grunt-amd tasks",
+	"version": "0.1.0",
+	"homepage": "https://github.com/zship/grunt-lib-amd",
+	"author": "Zach Shipley <zach@zachshipley.com>",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zship/grunt-lib-amd"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"amdefine": "0.0.x",
+		"grunt": "0.4.x",
+		"underscore": "1.4.x",
+		"mout": "0.3.x"
+	},
+	"keywords": [
+		"amd"
+  ]
+  }
