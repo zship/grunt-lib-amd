@@ -139,7 +139,21 @@
 					return true;
 				});
 
-			return result;
+			if (result) {
+				return result;
+			}
+
+			//try CommonJS Packages directory structure
+			return packages
+				.filter(function(pkg) {
+					return pkg.name === declaredName;
+				})
+				.map(function(pkg) {
+					return path.resolve(process.cwd(), rjsconfig.baseUrl, pkg.location, pkg.main || 'main');
+				})
+				.filter(function(path) {
+					return fs.existsSync(path) || fs.existsSync(path + '.js');
+				})[0];
 
 		}
 
