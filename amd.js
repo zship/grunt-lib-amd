@@ -7,10 +7,14 @@
 	var grunt = require('grunt/lib/grunt.js');
 	var mixin = require('mout/object/deepMixIn');
 	var _ = require('underscore');
+	var requirejs = require('./lib/r.js');
 	var parse = require('./lib/parse');
 
 
 	var amd = {
+
+		requirejs: requirejs,
+
 
 		loadConfig: function(config) {
 			if (config.mainConfigFile) {
