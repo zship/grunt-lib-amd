@@ -3,7 +3,7 @@
 	"main": "amd",
 	"title": "grunt-lib-amd",
 	"description": "Common functionality shared across grunt-amd tasks",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"homepage": "https://github.com/zship/grunt-lib-amd",
 	"author": "Zach Shipley <zach@zachshipley.com>",
 	"repository": {

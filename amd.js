@@ -61,24 +61,24 @@
 					to: key
 				};
 			}).concat(packages.map(function(pkg) {
-				return {
-					from: pkg.location,
-					to: pkg.name
-				};
+			return {
+				from: pkg.location,
+				to: pkg.name
+			};
 			}));
 
 			_.chain(transforms)
-				.sortBy(function(obj) {
-					//transform in order from most complex to simplest
-					return -1 * obj.from.length;
-				})
-				.every(function(obj) {
-					if (relativePath.search(obj.from) !== -1) {
-						relativePath = relativePath.replace(obj.from, obj.to);
-						return false;
-					}
-					return true;
-				});
+			.sortBy(function(obj) {
+				//transform in order from most complex to simplest
+				return -1 * obj.from.length;
+			})
+			.every(function(obj) {
+				if (relativePath.search(obj.from) !== -1) {
+					relativePath = relativePath.replace(obj.from, obj.to);
+					return false;
+				}
+				return true;
+			});
 
 			return relativePath.replace('.js', '');
 		},
@@ -107,7 +107,7 @@
 			if (fs.existsSync(candidate)) {
 				return candidate;
 			}
-			
+
 			//transformed paths (have 'paths' or 'packages' entries in rjsconfig)
 			var paths = rjsconfig.paths || [];
 			var packages = rjsconfig.packages || [];
@@ -126,38 +126,46 @@
 			var result;
 
 			_.chain(transforms)
-				.sortBy(function(obj) {
-					//transform in order from most complex to simplest
-					return -1 * obj.from.length;
-				})
-				.every(function(obj) {
-					var candidate = declaredName;
-					if (candidate.search(obj.from) !== -1) {
-						candidate = candidate.replace(obj.from, obj.to);
-						candidate = path.resolve(process.cwd() + '/' + rjsconfig.baseUrl + '/' + candidate + '.js');
-						if (fs.existsSync(candidate)) {
-							result = candidate;
-							return false;
-						}
+			.sortBy(function(obj) {
+				//transform in order from most complex to simplest
+				return -1 * obj.from.length;
+			})
+			.every(function(obj) {
+				var candidate = declaredName;
+				if (candidate.search(obj.from) !== -1) {
+					candidate = candidate.replace(obj.from, obj.to);
+					candidate = path.resolve(process.cwd() + '/' + rjsconfig.baseUrl + '/' + candidate + '.js');
+					if (fs.existsSync(candidate)) {
+						result = candidate;
+						return false;
 					}
-					return true;
-				});
+				}
+				return true;
+			});
 
 			if (result) {
 				return result;
 			}
 
 			//try CommonJS Packages directory structure
-			return packages
-				.filter(function(pkg) {
-					return pkg.name === declaredName;
-				})
-				.map(function(pkg) {
-					return path.resolve(process.cwd(), rjsconfig.baseUrl, pkg.location, pkg.main || 'main');
-				})
-				.filter(function(path) {
-					return fs.existsSync(path) || fs.existsSync(path + '.js');
-				})[0];
+			result = packages
+			.filter(function(pkg) {
+				return pkg.name === declaredName;
+			})
+			.map(function(pkg) {
+				return path.resolve(process.cwd(), rjsconfig.baseUrl, pkg.location, pkg.main || 'main');
+			})
+			.filter(function(path) {
+				return fs.existsSync(path) || fs.existsSync(path + '.js');
+			})[0];
+
+			if (result) {
+				return result;
+			}
+
+			//path in current directory without a leading './'
+			result = path.normalize(directory + '/' + declaredName + '.js');
+			return result;
 
 		}
 
